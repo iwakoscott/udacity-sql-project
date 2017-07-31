@@ -5,6 +5,13 @@
 
 import psycopg2
 
+def query_one():
+    sql = '''SELECT path, count(*) AS n FROM log
+            WHERE path like '/article/%'
+            GROUP BY path
+            ORDER BY n DESC
+            LIMIT 3;'''
+            
 def main():
     #TODO: 1. What are the most popular three articles of all time? Which
     #articles have been accessed the most? Present this information as a sorted
