@@ -58,38 +58,33 @@ query_three = '''
     WHERE grandquery.percentage > 0.01;
 '''
 
-def part_one():
-    """
-    1. What are the most popular three articles of all time? Which
-    #articles have been accessed the most? Present this information as a sorted
-    #list with the most popular article at the top.
+def get_results(query):
+    """Querys the 'news' database with the 'query' and returns the results based
+    on the query provided as a list.
     """
     with psycopg2.connect('dbname=news') as conn:
         cur = conn.cursor()
-        cur.execute(query_one)
-        data = [x[0] for x in cur.fetchall()]
-        return data
-
-def part_two():
-    """
-    TODO: 2. Who are the most popular article authors of all time? That is,
-    when you sum up all of the articles each author has written, which authors
-    get the most page views? Present this as a sorted list with the most
-    popular author at the top.
-    """
-    with psycopg2.connect('dbname=news') as conn:
-        cur = conn.cursor()
-        cur.execute(query_two)
+        cur.execute(query)
         data = [x[0] for x in cur.fetchall()]
         return data
 
 def main():
-    print(part_one())
-    print(part_two())
+    #TODO: 1. What are the most popular three articles of all time? Which
+    #articles have been accessed the most? Present this information as a sorted
+    #list with the most popular article at the top.
+    print(get_results(query_one))
+
+    # TODO: 2. Who are the most popular article authors of all time? That is,
+    # when you sum up all of the articles each author has written, which authors
+    # get the most page views? Present this as a sorted list with the most
+    # popular author at the top.
+    print(get_results(query_two))
 
     #TODO: 3. On which days did more than 1% of requests lead to errors?
     #The log table includes a column status that indicates the HTTP status code
     #that the news site sent to the user's browser.
+    print(get_results(query_three))
+
 
 
 
