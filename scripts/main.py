@@ -4,9 +4,10 @@
 # Udacity SQL Project
 
 import psycopg2
+import datetime as dt
 
 query_one = '''
-        SELECT title FROM articles JOIN
+        SELECT title, n_views.n FROM articles JOIN
         (SELECT path, count(*) AS n FROM log
         WHERE path like '/article/%'
         GROUP BY path
@@ -34,11 +35,11 @@ query_three = '''
       GROUP BY thedate, status
     )
 
-    SELECT grandquery.thedate
+    SELECT grandquery.thedate, round(grandquery.proportion*100, 2) as percent
     FROM
       (
         SELECT failed.thedate,
-        CAST(failed.n AS DECIMAL)/total.intotal AS percentage
+        CAST(failed.n AS DECIMAL)/total.intotal AS proportion
         FROM
         (
           (
@@ -55,9 +56,8 @@ query_three = '''
             on failed.thedate=total.thedate
           )
       ) AS grandquery
-    WHERE grandquery.percentage > 0.01;
+    WHERE grandquery.proportion > 0.01;
 '''
-
 
 def get_results(query):
     """Querys the 'news' database with the 'query' and returns the results based
@@ -66,26 +66,37 @@ def get_results(query):
     with psycopg2.connect('dbname=news') as conn:
         cur = conn.cursor()
         cur.execute(query)
-        data = [x[0] for x in cur.fetchall()]
-        return data
+        return cur.fetchall()
 
 
 def main():
     # 1. What are the most popular three articles of all time? Which
     # articles have been accessed the most? Present this information as a
     # sorted list with the most popular article at the top.
-    print(get_results(query_one))
+
+    print('\nTop Three Popular Articles of All Time')
+    for n, row in enumerate(get_results(query_one)):
+        article, views = row
+        print('{}. "{}"--{} views'.format(n + 1, article, views))
 
     # 2. Who are the most popular article authors of all time? That is,
     # when you sum up all of the articles each author has written, which
     # authors get the most page views? Present this as a sorted list with
     # the most popular author at the top.
-    print(get_results(query_two))
+    print('\nMost Popular Article Authors of All Time')
+    for n, row in enumerate(get_results(query_two)):
+        author, views = row
+        print('{}. {}--{} views'.format(n + 1, author, views))
 
+    print('''\nDays Where More Than 1% of Requests Lead to Errors''')
     # 3. On which days did more than 1% of requests lead to errors?
     # The log table includes a column status that indicates the HTTP
     # status code that the news site sent to the user's browser.
-    print(get_results(query_three))
+    for n, row in enumerate(get_results(query_three)):
+        date, error = row
+        date = dt.datetime.strptime(date, '%Y-%m-%d')
+        dateasstr = dt.datetime.strftime(date, '%B %d, %Y')
+        print('{}. {}--{}% errors'.format(n + 1, dateasstr, error))
 
 if __name__ == '__main__':
     main()
