@@ -15,3 +15,6 @@ In your terminal navigate to the directory 'scripts' containing 'main.py' and ru
 
 ## Copy of Output?
 Open 'output.txt' in your favorite text editor or simply run 'cat output.txt' to view the output of 'main'.
+
+## What is the directory 'misc'?
+You don't actually have to go in there at all. I just put a .txt file that helped me visualize the three tables provided for this assignment.
