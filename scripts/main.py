@@ -23,6 +23,41 @@ query_two = '''
         GROUP BY articlesauthors.name
         ORDER BY n DESC;'''
 
+query_three = '''
+    WITH subquery AS
+    (
+      SELECT
+      log.status,
+      substring(CAST(log.time AS TEXT), 1, 10) AS thedate,
+      count(*) AS n
+      FROM log
+      GROUP BY thedate, status
+    )
+
+    SELECT grandquery.thedate
+    FROM
+      (
+        SELECT failed.thedate,
+        CAST(failed.n AS DECIMAL)/total.intotal AS percentage
+        FROM
+        (
+          (
+            SELECT subquery.thedate, subquery.n
+            FROM subquery
+            WHERE subquery.status LIKE '404%') AS failed
+            JOIN
+              (
+                SELECT subquery.thedate,
+                sum(subquery.n) AS intotal
+                FROM subquery
+                GROUP BY subquery.thedate
+              ) AS total
+            on failed.thedate=total.thedate
+          )
+      ) AS grandquery
+    WHERE grandquery.percentage > 0.01;
+'''
+
 def part_one():
     """
     1. What are the most popular three articles of all time? Which
