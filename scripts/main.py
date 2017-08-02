@@ -69,18 +69,18 @@ def get_results(query):
         return data
 
 def main():
-    #TODO: 1. What are the most popular three articles of all time? Which
+    # 1. What are the most popular three articles of all time? Which
     #articles have been accessed the most? Present this information as a sorted
     #list with the most popular article at the top.
     print(get_results(query_one))
 
-    # TODO: 2. Who are the most popular article authors of all time? That is,
+    # 2. Who are the most popular article authors of all time? That is,
     # when you sum up all of the articles each author has written, which authors
     # get the most page views? Present this as a sorted list with the most
     # popular author at the top.
     print(get_results(query_two))
 
-    #TODO: 3. On which days did more than 1% of requests lead to errors?
+    # 3. On which days did more than 1% of requests lead to errors?
     #The log table includes a column status that indicates the HTTP status code
     #that the news site sent to the user's browser.
     print(get_results(query_three))
