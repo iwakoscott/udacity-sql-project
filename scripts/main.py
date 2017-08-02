@@ -85,8 +85,5 @@ def main():
     #that the news site sent to the user's browser.
     print(get_results(query_three))
 
-
-
-
 if __name__ == '__main__':
     main()
