@@ -1,4 +1,4 @@
-# myfirstwebsite
+# udacity-sql-project
 
 ## How to Download code:
 
