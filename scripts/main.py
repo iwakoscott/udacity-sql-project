@@ -7,14 +7,14 @@ import psycopg2
 import datetime as dt
 
 query_one = '''
-        SELECT title, n_views.n FROM articles JOIN
-        (SELECT path, count(*) AS n FROM log
-        WHERE path like '/article/%'
-        GROUP BY path
-        ORDER BY n DESC
-        LIMIT 3) as n_views
-        ON n_views.path ILIKE '%' || articles.slug || '%'
-        ORDER BY n_views.n DESC;'''
+    SELECT titles.title,
+    COUNT(*) AS n FROM log JOIN
+    (SELECT slug, title FROM articles) AS titles
+    ON log.path LIKE '/article/' || titles.slug
+    GROUP BY titles.title
+    ORDER BY n DESC
+    LIMIT 3;
+'''
 
 query_two = '''
         SELECT articlesauthors.name, COUNT(*) AS n FROM (SELECT * FROM articles
