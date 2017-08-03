@@ -59,6 +59,7 @@ query_three = '''
     WHERE grandquery.proportion > 0.01;
 '''
 
+
 def get_results(query):
     """Querys the 'news' database with the 'query' and returns the results based
     on the query provided as a list.
