@@ -20,7 +20,7 @@ query_two = '''
         SELECT articlesauthors.name, COUNT(*) AS n FROM (SELECT * FROM articles
         JOIN authors
         ON articles.author=authors.id) AS articlesauthors
-        JOIN log ON log.path ILIKE '%' || articlesauthors.slug || '%'
+        JOIN log ON log.path ILIKE '%' || articlesauthors.slug
         GROUP BY articlesauthors.name
         ORDER BY n DESC;'''
 
